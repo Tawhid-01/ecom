@@ -3,7 +3,7 @@ from products.models import Product
 
 # Create your views here.
 
-def index(request):
+def index(req):
 
-    # context = {'products' : Product.objects.all()}
-    return render(request , 'index.html')
+    context = {'products' : Product.objects.all()}
+    return render(req , 'index.html', context)

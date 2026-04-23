@@ -1,25 +1,22 @@
 {% extends 'base.html' %}
 
 {% block start %}
-  <div class="container mt-5 pt-5">
-    <div class="row">
-      {% for product in Product %}
-        <div class="col-md-3">
-          <figure class="card card-product-grid">
-            <div class="img-wrap">
-              {% if product.product_images.first %}
-                <img src="{{ product.product_images.first.image.url }}" />
-              {% else %}
-                <img src="/static/images/placeholder.png" />
-              {% endif %}
-            </div>
-            <figcaption class="info-wrap border-top">
-              <a href="{% url 'get_product' product.slug %}" class="title"><b>{{ product.product_name }}</b></a>
-              <div class="price mt-2">${{ product.price }}.00</div> <!-- price-wrap.// -->
-            </figcaption>
-          </figure> <!-- card // -->
-        </div> <!-- col.// -->
-      {% endfor %}
-    </div>
-  </div>
+ <div class="container mt-5 pt-5">
+		<div class="row">
+      {% for p in products %}
+			<div class="col-md-3">
+				<figure class="card card-product-grid">
+					<div class="img-wrap"> <img src="/media/{{p.product_images.first.image}}"> </div>
+					<figcaption class="info-wrap border-top">
+						<a href="{% url "get_product" p.slug %}" class="title">
+              <b>{{p.product_name}}</b>
+            </a>
+						<div class="price mt-2">${{p.price}}.00</div> <!-- price-wrap.// -->
+					</figcaption>
+				</figure> <!-- card // -->
+			</div> <!-- col.// -->
+			{% endfor %}
+		</div>
+
+		</div>
 {% endblock %}
