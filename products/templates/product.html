@@ -45,7 +45,14 @@
 			</div> <!-- rating-wrap.// -->
 			
 			<div class="mb-3"> 
-				<var class="price h4">${{product.price}}.00</var> 
+				<var class="price h4">$
+					{% if updated_price %}
+        {{updated_price}}
+    {% else %}
+        {{product.price}}
+    {% endif %}
+
+                     .00</var> 
 				<span class="text-muted">/per kg</span> 
 			</div> <!-- price-detail-wrap .// -->
 			
@@ -56,8 +63,18 @@
 			  <dt class="col-sm-3">Model#</dt>
 			  <dd class="col-sm-9">Odsy-1000</dd>
 			
-			  <dt class="col-sm-3">Color</dt>
-			  <dd class="col-sm-9">Brown</dd>
+			 <dt class="col-sm-3">Color</dt>
+<dd class="col-sm-9">
+    {% for color in product.color_variants.all %}
+    <label class="custom-control custom-radio custom-control-inline">
+        <input type="radio" name="select_color" 
+               onchange="get_correct_color('{{color.color_name}}')"
+               {% if selected_color == color.color_name %} checked {% endif %} 
+               class="custom-control-input">
+        <div class="custom-control-label">{{color.color_name}}</div>
+    </label>
+    {% endfor %}
+</dd>
 			
 			  <dt class="col-sm-3">Delivery</dt>
 			  <dd class="col-sm-9">Russia, USA, and Europe </dd>
@@ -77,26 +94,23 @@
 						  </div>
 						</div>
 					</div> <!-- col.// -->
+
+					{% if product.size_variants.count %}
 					<div class="form-group col-md">
 							<label>Select size</label>
 							<div class="mt-1">
+
+								{% for size in product.size_variants.all %}
 								<label class="custom-control custom-radio custom-control-inline">
-								  <input type="radio" name="select_size" checked="" class="custom-control-input">
-								  <div class="custom-control-label">Small</div>
+								  <input type="radio" onchange="get_correct_size('{{size.size_name}}')" name="select_size" {% if selected_size == size.size_name %} checked {% endif %} class="custom-control-input">
+								  <div class="custom-control-label">{{size.size_name}}</div>
 								</label>
+								{% endfor %}
 			
-								<label class="custom-control custom-radio custom-control-inline">
-								  <input type="radio" name="select_size" class="custom-control-input">
-								  <div class="custom-control-label">Medium</div>
-								</label>
-			
-								<label class="custom-control custom-radio custom-control-inline">
-								  <input type="radio" name="select_size" class="custom-control-input">
-								  <div class="custom-control-label">Large</div>
-								</label>
-			
+								
 							</div>
 					</div> <!-- col.// -->
+					{% endif %}
 				</div> <!-- row.// -->
 			
 				<a href="#" class="btn  btn-primary"> Buy now </a>
@@ -112,5 +126,25 @@
 			</section>	
 		
     
+   
+		<script>
+			function get_correct_size(size){
+				window.location.href = window.location.pathname + `?size=${size}`
+			}
 
+			function get_correct_color(color) {
+    let params = new URLSearchParams(window.location.search);
+    params.set('color', color); // Updates or adds color
+    window.location.search = params.toString();
+}
+
+function get_correct_size(size) {
+    let params = new URLSearchParams(window.location.search);
+    params.set('size', size); // Updates or adds size
+    window.location.search = params.toString();
+}
+		</script>
+
+
+			
 {% endblock %}
